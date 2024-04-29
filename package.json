@@ -1,0 +1,35 @@
+{
+  "name": "diamondism",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "start": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.6",
+    "@grpc/proto-loader": "^0.7.12",
+    "@mapbox/mapbox-sdk": "^0.15.5",
+    "@rematch/core": "^2.2.0",
+    "@rematch/immer": "^2.1.3",
+    "@rematch/select": "^3.1.2",
+    "@types/node": "^20.12.5",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prisma": "^5.12.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.3.1",
+    "remix": "^2.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.4",
+    "vite": "^5.2.10",
+    "vitest": "^1.5.2"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}
