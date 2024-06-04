@@ -4,7 +4,7 @@
 import { FileInfo } from '@uploadcare/rest-client';
 import { client } from './db-lib';
 import { listFiles } from './uc-lib';
-import { fileInfoToDbFile } from '../app/morphisms';
+import { fileInfoToDbFile } from '../app/lib/morphisms';
 
 // Postgres create table
 const createStatement = `

@@ -2,6 +2,7 @@ import {
   listOfFiles,
   deleteFiles,
   UploadcareSimpleAuthSchema,
+  FileInfo,
 } from '@uploadcare/rest-client';
 import config from '../config';
 
@@ -16,7 +17,7 @@ export const listFilesFirst1000 = () => listOfFiles(
   { authSchema: uploadcareSimpleAuthSchema }
 ).then(rsp => rsp.results);
 
-export const listFiles = async (pageUrl = null) => {
+export const listFiles = async (pageUrl = null):Promise<FileInfo[]> => {
   const fromPage = pageUrl && {from:new URL(pageUrl).searchParams.get('from')};
   const { next, total, results } = await listOfFiles(
     { ordering: '-datetime_uploaded', limit: 1000, ...fromPage },

@@ -12,8 +12,9 @@
     "build": "remix vite:build",
     "show-remix-magic-files": "remix reveal",
     "autoformat": "prettier --write app/**",
-    "initdb": "vite-node scripts/init-db.ts",
-    "list-uc-files": "vite-node scripts/uc-list.ts"
+    "init-db": "vite-node scripts/init-db.ts",
+    "list-uc-files": "vite-node scripts/uc-list.ts",
+    "init-uc": "vite-node scripts/uc-delete-all-remote-files.ts"
   },
   "keywords": [],
   "author": "",
