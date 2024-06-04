@@ -4,7 +4,7 @@ import { UploadcareFile } from '@uploadcare/blocks';
 import { ImageGrid } from '../components/image-grid/image-grid';
 import { dbSave } from '../db.server';
 import { DbFile, PhotoContextProps } from '../interfaces';
-import { Uploader } from '../uploader';
+import { Uploader } from '../components/uploader';
 import { uploadcareFileToDbFile } from '../morphisms';
 
 export async function action({ request }: ActionFunctionArgs) {
