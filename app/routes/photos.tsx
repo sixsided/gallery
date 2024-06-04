@@ -2,10 +2,10 @@ import { ActionFunctionArgs } from '@remix-run/node';
 import { Outlet, json, useFetcher, useOutletContext } from '@remix-run/react';
 import { UploadcareFile } from '@uploadcare/blocks';
 import { ImageGrid } from '../components/image-grid/image-grid';
-import { dbSave } from '../db.server';
-import { DbFile, PhotoContextProps } from '../interfaces';
+import { dbSave } from '../lib/db.server';
+import { DbFile, PhotoContextProps } from '../lib/interfaces';
 import { Uploader } from '../components/uploader';
-import { uploadcareFileToDbFile } from '../morphisms';
+import { uploadcareFileToDbFile } from '../lib/morphisms';
 
 export async function action({ request }: ActionFunctionArgs) {
   const uploadedFiles: UploadcareFile[] = [await request.json()];

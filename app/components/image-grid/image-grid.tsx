@@ -1,5 +1,5 @@
 import './image-grid.css';
-import { DbFile } from '../../interfaces';
+import { DbFile } from '../../lib/interfaces';
 import GridItem from '../grid-item/grid-item';
 
 

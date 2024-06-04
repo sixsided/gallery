@@ -2,8 +2,8 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, } from 
 
 import type { LinksFunction } from '@remix-run/node';
 
-import { dbQuery } from './db.server';
-import { PhotosDbRowType } from './interfaces';
+import { dbQuery } from './lib/db.server';
+import { PhotosDbRowType } from './lib/interfaces';
 
 import tufteCssUrl from './style/tufte.css?url';
 import mainCssUrl from './style/main.css?url';

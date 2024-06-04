@@ -1,7 +1,7 @@
 import { UploadcareFile } from '@uploadcare/blocks';
 import { FileInfo } from '@uploadcare/rest-client';
 import pg from 'pg';
-import config from '../config';
+import config from '../../config';
 import { PhotosDbRowType } from './interfaces';
 
 export const toDbFile = ({uuid, contentInfo,size,originalFileUrl, originalFilename}:FileInfo) => ({
