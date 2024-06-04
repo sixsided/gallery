@@ -1,0 +1,39 @@
+.grid-item {
+  /* outline: 1px fuchsia solid; */
+  .grid-item__thumbnail {
+    transition: transform 0.14s;
+  }
+
+  &:hover .grid-item__thumbnail {
+    transform: scale(1.05);
+  }
+}
+
+.grid-item a {
+  text-decoration: none;
+}
+
+.grid-item__thumbnail {
+  transition: background-color 0.14s;
+  transform-origin: bottom center;
+  margin: auto;
+  min-width: 150px;
+  min-height: 150px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+
+.grid-item__thumbnail img {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.grid-item__tools {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 4px 4px 0 2px;
+}
