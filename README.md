@@ -1,8 +1,5 @@
-https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgresql
-    https://www.prisma.io/typescript
-https://www.mapbox.com/developers
-https://remix.run/docs/en/main
-
-
-rematch - state mgmt
-remix - client/server intermingling with nested routes
+# Photo gallery and uploader
+- uploadcare.com for file upload and storage
+- tembo.io for postgres backend
+- photos link to full-size originals
+- keyboard navigation
