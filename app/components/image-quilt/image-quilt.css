@@ -1,0 +1,10 @@
+.image-quilt {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  line-height: 0;
+}
+
+.image-quilt__item {
+  margin: 0;
+}
