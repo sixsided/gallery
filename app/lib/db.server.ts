@@ -13,7 +13,7 @@ export const toDbFile = ({uuid, contentInfo,size,originalFileUrl, originalFilena
 });
 
 
-async function getPostgresClient(): Promise<pg.Client> {
+async function getPostgresClient(): Promise<any> {
   console.log('>>> pg.Pool.connect');
   const pool = new pg.Pool({
     connectionString: config.postgresConnectionString,

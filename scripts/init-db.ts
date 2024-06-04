@@ -1,7 +1,6 @@
 // this will drop the remote db's `photos` table and re-create it with whatever is 
 // found in Uploadcare
 
-import { FileInfo } from '@uploadcare/rest-client';
 import { client } from './db-lib';
 import { listFiles } from './uc-lib';
 import { fileInfoToDbFile } from '../app/lib/morphisms';
@@ -36,7 +35,6 @@ async function initializeDatabase() {
     console.log(`INSERTing ${ucFiles.length} rows into psql table...`);
     for (let i = 0; i < ucFiles.length; i++) {
       const item = ucFiles[i];
-      // call json so we error out on any attemt to insert invalid JSON
       const result = await client.query("INSERT INTO photos(uuid, name, json) VALUES($1,$2,$3)", [
         item.uuid,
         item.originalFilename,
