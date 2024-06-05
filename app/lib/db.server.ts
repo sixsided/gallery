@@ -1,38 +1,22 @@
-import { UploadcareFile } from '@uploadcare/blocks';
-import { FileInfo } from '@uploadcare/rest-client';
+import joi from 'joi';
 import pg from 'pg';
 import config from '../../config';
 import { DbFile, PhotosDbRowType } from './interfaces';
-import joi from 'joi';
-
-export const toDbFile = ({uuid, contentInfo,size,originalFileUrl, originalFilename}:FileInfo) => ({
-  uuid,
-  size,
-  originalFileUrl,
-  contentInfo,
-  originalFilename
-});
-
 
 const pool = new pg.Pool({
   connectionString: config.postgresConnectionString,
   ssl: {
-    ca: config.postgresCert
+    ca: config.postgresCert,
   },
 });
 
-async function getPostgresClient(): Promise<pg.Client> {
-  console.log('[getPostgresClient]', 'total:', pool.totalCount, 'idle:',pool.idleCount);
-  return pool.connect();
-}
-
-async function withPgClient(f){
-  const client = await getPostgresClient();
+async function withPgClient(f) {
+  console.log('[withPgClient]', 'total:', pool.totalCount, 'idle:', pool.idleCount);
+  const client = await pool.connect();
   let result;
   try {
-    console.log('[withPgClient]', 'total:', pool.totalCount, 'idle:',pool.idleCount);
     result = await f(client);
-  } catch(e){
+  } catch (e) {
     console.error(e);
   }
   client.release();
@@ -40,12 +24,12 @@ async function withPgClient(f){
 }
 
 export async function dbQuery(): Promise<PhotosDbRowType[]> {
-  const res = await withPgClient(client => client.query('SELECT uuid, name, json FROM photos ORDER BY ID DESC'));
+  const res = await withPgClient((client) => client.query('SELECT uuid, name, json FROM photos ORDER BY ID DESC'));
   return res.rows;
 }
 
-function validate(uf: DbFile):DbFile | null {
-  // Never Trust The Client™
+// Never Trust The Client™
+function sanitize(uf: DbFile): DbFile | null {
   const schema = joi.object().keys({
     uuid: joi.string().length(36),
     originalFileUrl: joi.string().min(7).max(512),
@@ -56,17 +40,17 @@ function validate(uf: DbFile):DbFile | null {
       mime: joi.object({
         mime: joi.string(),
         type: joi.string(),
-        subtype: joi.string()
+        subtype: joi.string(),
       }),
       image: joi.object({
         width: joi.number(),
-        height:joi.number()
-      })
+        height: joi.number(),
+      }),
     }),
   });
-  const result = schema.validate(uf, {stripUnknown:true});
-  // console.log(JSON.stringify(result, null, 4));
-  if(result.error) {
+
+  const result = schema.validate(uf, { stripUnknown: true });
+  if (result.error) {
     console.error(result.error);
     return null;
   } else {
@@ -74,43 +58,18 @@ function validate(uf: DbFile):DbFile | null {
   }
 }
 
-
-const saveOne = uploadedFile => async client => {
-  const item = validate(uploadedFile);
-  if(!item) return false;
-
-  const insertResult = await client.query('INSERT INTO photos(uuid, name, json) VALUES($1,$2,$3)', [
+const saveOne = async (client, uploadedFile) => {
+  const item = sanitize(uploadedFile);
+  if (!item) return false;
+  await client.query('INSERT INTO photos(uuid, name, json) VALUES($1,$2,$3)', [
     item.uuid,
     item.originalFilename,
     JSON.stringify(item),
   ]);
-  // console.log('INSERT:', JSON.stringify(insertResult));
-}
+};
 
-export async function dbSaveOne(uploadedFile: DbFile) {
-  console.log('[dbSaveOne]', uploadedFile);
-  return withPgClient(saveOne(uploadedFile))
-}
+export const dbSaveOne = async (uploadedFile: DbFile) => withPgClient((c) => saveOne(c, uploadedFile));
 
-export async function dbSaveMany(ufs:DbFile[]) {
-  return withPgClient(async client => {
-    console.log('[>>> dbSaveMany]', ufs);
-    for(let uf of ufs) {
-      await saveOne(uf)(client);
-    }
-    const escapedIds = ufs.map(uf => uf.uuid).map((uuid) => pg.escapeLiteral(uuid));
-    const res = await client.query(`SELECT uuid, name, json FROM photos WHERE uuid IN ( ${escapedIds.join(', ')} ) `);
-    return res.rows;
-  });
-}
+export const dbSaveMany = async (ufs: DbFile[]) => withPgClient((c) => Promise.all(ufs.map((uf) => saveOne(c, uf))));
 
-//   // respond with the new database rows
-//   if(uuids.length){
-//     const escapedIds = uuids.map((id) => pg.escapeLiteral(id));
-//     console.log('[dbSave] > > > INSERTed', escapedIds.join(', '));
-//     const res = await client.query(`SELECT uuid, name, json FROM photos WHERE uuid IN ( ${escapedIds.join(', ')} ) `);
-//     return res.rows;
-//   } else {
-//     return [];
-//   }
-// }
+export const dbDelete = async ({ uuid }) => withPgClient((c) => c.query('DELETE FROM photos WHERE uuid=$1', [uuid]));

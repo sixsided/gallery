@@ -5,9 +5,10 @@ LR.registerBlocks(LR); // enable the Web Components
 
 export type UploaderPropsType = {
   onUpload: (files: LR.UploadcareFile[]) => void;
+  onRemove?: (uuid:string) => void;
 };
 
-export const Uploader = ({ onUpload }: UploaderPropsType) => {
+export const Uploader = ({ onUpload, onRemove }: UploaderPropsType) => {
   const [alreadyUploaded, setAlreadyUploaded] = useState({}); // hack: Uploader component fires multiple success events with same file uuids
   console.log('[Uploader] render', Object.keys(alreadyUploaded).length);
   const ctxProviderRef = useRef<InstanceType<LR.UploadCtxProvider>>(null);
@@ -36,7 +37,15 @@ export const Uploader = ({ onUpload }: UploaderPropsType) => {
       // newUploads.forEach(f => onUpload?.(f.fileInfo))
     };
 
+    const handleRemoveEvent = (e: LR.EventMap['file-removed']) => {
+      console.log('removed:', e);
+      if(e.detail.uuid) {
+        onRemove?.(e.detail.uuid);
+      }
+    }
+
     ctxProvider.addEventListener('change', handleChangeEvent);
+    ctxProvider.addEventListener('file-removed', handleRemoveEvent);
 
     return () => ctxProvider.removeEventListener('change', handleChangeEvent);
   };

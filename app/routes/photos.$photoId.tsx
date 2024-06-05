@@ -1,6 +1,6 @@
 import { Link, useMatches, useNavigate, useOutletContext } from '@remix-run/react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { PhotoContextProps } from '../interfaces';
+import { PhotoContextProps } from '../lib/interfaces';
 
 export default () => {
   const routeMatches = useMatches();
