@@ -7,10 +7,10 @@ export default () => {
 
   const navigate = useNavigate();
 
-  // current photo
+  // current photo uuid
   const id = routeMatches.at(-1)?.params.photoId as string;
 
-  // prev/next navigation
+  // prev/next navigation uuids
   const { imageIds: photoIds, filesList } = useOutletContext() as PhotoContextProps;
 
   // sizing hint
@@ -36,16 +36,17 @@ export default () => {
       )}
     </>
   );
+
   useHotkeys('left', () => prev && navigate(prev));
   useHotkeys('right', () => next && navigate(next));
 
   const close = (e) => {
-    if ('photo__link-text' !== e.target.className) navigate('/photos');
+    if(e.target === e.currentTarget) navigate('/photos');
   };
+
   useHotkeys('escape', close);
 
   const photoImageUrl = (id) => `https://ucarecdn.com/${id}/`;
-  // const photoImageUrl = (id) => filesList.find(f => f.uuid === id)?.
 
   return (
     <div className="photo" onClick={close}>
