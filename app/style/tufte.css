@@ -305,6 +305,7 @@ a:link,
 }
 
 /* Adds dark mode */
+/*
 @media (prefers-color-scheme: dark) {
   a:link,
   .tufte-underline,
@@ -324,6 +325,7 @@ a:link,
       -0.15em 0 #151515;
   }
 }
+*/
 
 a:link::selection,
 a:link::-moz-selection {
