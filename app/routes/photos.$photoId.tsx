@@ -39,7 +39,9 @@ export default () => {
   useHotkeys('left', () => prev && navigate(prev));
   useHotkeys('right', () => next && navigate(next));
 
-  const close = (e) => { if('photo__link-text' !== e.target.className) navigate('/photos'); }
+  const close = (e) => {
+    if ('photo__link-text' !== e.target.className) navigate('/photos');
+  };
   useHotkeys('escape', close);
 
   const photoImageUrl = (id) => `https://ucarecdn.com/${id}/`;

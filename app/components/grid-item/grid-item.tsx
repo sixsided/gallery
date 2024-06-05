@@ -11,7 +11,7 @@ type GridItemProps = {
   largeUrl: string;
   originalUrl: string;
   name?: string;
-  dimensions?: { width:number; height:number };
+  dimensions?: { width: number; height: number };
 };
 
 export default ({ thumbnailUrl, largeUrl, originalUrl, name, dimensions }: GridItemProps) => {

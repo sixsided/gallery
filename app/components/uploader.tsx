@@ -5,7 +5,7 @@ LR.registerBlocks(LR); // enable the Web Components
 
 export type UploaderPropsType = {
   onUpload: (files: LR.UploadcareFile[]) => void;
-  onRemove?: (uuid:string) => void;
+  onRemove?: (uuid: string) => void;
 };
 
 export const Uploader = ({ onUpload, onRemove }: UploaderPropsType) => {
@@ -18,20 +18,27 @@ export const Uploader = ({ onUpload, onRemove }: UploaderPropsType) => {
     if (!ctxProvider) return;
 
     const handleChangeEvent = (e: LR.EventMap['change']) => {
-      
       // wait until status is `success` and uploading is done
       const isSuccess = e.detail.status === 'success';
-      const isInactive = (e.detail.successCount + e.detail.failedCount) === e.detail.totalCount;
+      const isInactive = e.detail.successCount + e.detail.failedCount === e.detail.totalCount;
       const isDone = isSuccess && isInactive;
-      console.warn(e.detail.status, 'when', e.detail.successCount + ' + ' + e.detail.failedCount, ' = ' + e.detail.totalCount, isDone ? 'DONE' : 'PENDING', '@', e.detail.progress);
-      if(!isDone) return;
+      console.warn(
+        e.detail.status,
+        'when',
+        e.detail.successCount + ' + ' + e.detail.failedCount,
+        ' = ' + e.detail.totalCount,
+        isDone ? 'DONE' : 'PENDING',
+        '@',
+        e.detail.progress,
+      );
+      if (!isDone) return;
 
-      const newUploads = e.detail.successEntries.filter(f => !alreadyUploaded[f.uuid]);
+      const newUploads = e.detail.successEntries.filter((f) => !alreadyUploaded[f.uuid]);
 
       // exclude already-seen uploads, as when user clicks the delete widget
-      newUploads.forEach(f => alreadyUploaded[f.uuid] = true);
+      newUploads.forEach((f) => (alreadyUploaded[f.uuid] = true));
       setAlreadyUploaded(alreadyUploaded);
-      onUpload(newUploads.map(f=>f.fileInfo));
+      onUpload(newUploads.map((f) => f.fileInfo));
       // console.log('->', ...Object.keys(alreadyUploaded));
 
       // newUploads.forEach(f => onUpload?.(f.fileInfo))
@@ -39,10 +46,10 @@ export const Uploader = ({ onUpload, onRemove }: UploaderPropsType) => {
 
     const handleRemoveEvent = (e: LR.EventMap['file-removed']) => {
       console.log('removed:', e);
-      if(e.detail.uuid) {
+      if (e.detail.uuid) {
         onRemove?.(e.detail.uuid);
       }
-    }
+    };
 
     ctxProvider.addEventListener('change', handleChangeEvent);
     ctxProvider.addEventListener('file-removed', handleRemoveEvent);
@@ -54,7 +61,11 @@ export const Uploader = ({ onUpload, onRemove }: UploaderPropsType) => {
 
   return (
     <div>
-      <ul>{Object.keys(alreadyUploaded).map(uuid => <li key={uuid}>{uuid}</li>)}</ul>
+      <ul>
+        {Object.keys(alreadyUploaded).map((uuid) => (
+          <li key={uuid}>{uuid}</li>
+        ))}
+      </ul>
       <h3>upload images:</h3>
       <lr-config ctx-name="my-uploader" pubkey="c9c5b55dca319d0802a6"></lr-config>
       <lr-file-uploader-minimal

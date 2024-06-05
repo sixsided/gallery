@@ -36,11 +36,14 @@ export default () => {
   };
 
   const remove = async (uuid: string) =>
-    fetcher.submit({uuid}, {
-      action: '/photos',
-      method: 'DELETE',
-      encType: 'application/json',
-    });
+    fetcher.submit(
+      { uuid },
+      {
+        action: '/photos',
+        method: 'DELETE',
+        encType: 'application/json',
+      },
+    );
 
   return (
     <div id="photos">

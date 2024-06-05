@@ -2,7 +2,6 @@ import './image-grid.css';
 import { DbFile } from '../../lib/interfaces';
 import GridItem from '../grid-item/grid-item';
 
-
 const resize = `-/resize/x240`;
 const imgUrl = (uuid, tweak) => `https://ucarecdn.com/${uuid}/${tweak}/`;
 const thumbnail = (uuid) => imgUrl(uuid, resize);
