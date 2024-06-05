@@ -18,7 +18,7 @@ export default ({ thumbnailUrl, largeUrl, originalUrl, name, dimensions }: GridI
   const thumbnailCssUrl = `url("${thumbnailUrl}")`;
   return (
     <div className="grid-item">
-      <Link to={largeUrl}>
+      <Link to={largeUrl} title={name}>
         <div className="grid-item__thumbnail" style={{ backgroundImage: thumbnailCssUrl }}></div>
       </Link>
       <a className="grid-item__tools no-tufte-underline" target="_blank" href={originalUrl} title={name}>

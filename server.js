@@ -2,11 +2,6 @@ import { createRequestHandler } from "@remix-run/express";
 import express from "express";
 import { broadcastDevReady } from "@remix-run/node";
 
-// notice that the result of `remix vite:build` is "just a module"
-// import * as build from "./build/server/index.js";
-
-
-
 const viteDevServer =
   process.env.NODE_ENV === "production" // per the docs: https://remix.run/docs/en/main/start/quickstart
   // import.meta.env.NODE_ENV === "production" // doesn't work

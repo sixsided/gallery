@@ -14,7 +14,7 @@
     "autoformat": "prettier --write app/**",
     "init-db": "vite-node scripts/init-db.ts",
     "list-uc-files": "vite-node scripts/uc-list.ts",
-    "init-uc": "vite-node scripts/uc-delete-all-remote-files.ts"
+    "delete-all-uc-files": "vite-node scripts/uc-delete-all-remote-files.ts"
   },
   "keywords": [],
   "author": "",

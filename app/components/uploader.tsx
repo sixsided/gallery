@@ -1,13 +1,15 @@
 import * as LR from '@uploadcare/blocks';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 LR.registerBlocks(LR); // enable the Web Components
 
 export type UploaderPropsType = {
-  onUpload: (file: LR.UploadcareFile) => void;
+  onUpload: (files: LR.UploadcareFile[]) => void;
 };
 
 export const Uploader = ({ onUpload }: UploaderPropsType) => {
+  const [alreadyUploaded, setAlreadyUploaded] = useState({}); // hack: Uploader component fires multiple success events with same file uuids
+  console.log('[Uploader] render', Object.keys(alreadyUploaded).length);
   const ctxProviderRef = useRef<InstanceType<LR.UploadCtxProvider>>(null);
 
   const addChangeHandler = () => {
@@ -15,7 +17,23 @@ export const Uploader = ({ onUpload }: UploaderPropsType) => {
     if (!ctxProvider) return;
 
     const handleChangeEvent = (e: LR.EventMap['change']) => {
-      e.detail.successEntries.forEach(f => onUpload?.(f.fileInfo))
+      
+      // wait until status is `success` and uploading is done
+      const isSuccess = e.detail.status === 'success';
+      const isInactive = (e.detail.successCount + e.detail.failedCount) === e.detail.totalCount;
+      const isDone = isSuccess && isInactive;
+      console.warn(e.detail.status, 'when', e.detail.successCount + ' + ' + e.detail.failedCount, ' = ' + e.detail.totalCount, isDone ? 'DONE' : 'PENDING', '@', e.detail.progress);
+      if(!isDone) return;
+
+      const newUploads = e.detail.successEntries.filter(f => !alreadyUploaded[f.uuid]);
+
+      // exclude already-seen uploads, as when user clicks the delete widget
+      newUploads.forEach(f => alreadyUploaded[f.uuid] = true);
+      setAlreadyUploaded(alreadyUploaded);
+      onUpload(newUploads.map(f=>f.fileInfo));
+      // console.log('->', ...Object.keys(alreadyUploaded));
+
+      // newUploads.forEach(f => onUpload?.(f.fileInfo))
     };
 
     ctxProvider.addEventListener('change', handleChangeEvent);
@@ -27,6 +45,7 @@ export const Uploader = ({ onUpload }: UploaderPropsType) => {
 
   return (
     <div>
+      <ul>{Object.keys(alreadyUploaded).map(uuid => <li key={uuid}>{uuid}</li>)}</ul>
       <h3>upload images:</h3>
       <lr-config ctx-name="my-uploader" pubkey="c9c5b55dca319d0802a6"></lr-config>
       <lr-file-uploader-minimal
