@@ -52,7 +52,7 @@ export default () => {
     if(e.target === e.currentTarget) navigate('/photos');
   };
 
-  useHotkeys('escape', close);
+  useHotkeys('escape', () => navigate('/photos'));
 
   const photoImageUrl = (id) => `https://ucarecdn.com/${id}/`;
 
