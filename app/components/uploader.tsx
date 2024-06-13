@@ -61,11 +61,6 @@ export const Uploader = ({ onUpload, onRemove }: UploaderPropsType) => {
 
   return (
     <div>
-      <ul>
-        {Object.keys(alreadyUploaded).map((uuid) => (
-          <li key={uuid}>{uuid}</li>
-        ))}
-      </ul>
       <h3>upload images:</h3>
       <lr-config ctx-name="my-uploader" pubkey="c9c5b55dca319d0802a6"></lr-config>
       <lr-file-uploader-minimal
