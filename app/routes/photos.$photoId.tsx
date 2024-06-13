@@ -2,6 +2,14 @@ import { Link, useMatches, useNavigate, useOutletContext } from '@remix-run/reac
 import { useHotkeys } from 'react-hotkeys-hook';
 import { PhotoContextProps } from '../lib/interfaces';
 
+import photoCssUrl from '../style/photo.css?url';
+import { LinksFunction } from '@remix-run/node';
+
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: photoCssUrl },
+];
+
+
 export default () => {
   const routeMatches = useMatches();
 
